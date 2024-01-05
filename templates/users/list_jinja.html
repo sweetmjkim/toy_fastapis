@@ -18,11 +18,11 @@
             {% for user in users %}
             <tr>
                 <!-- FastAPI를 사용한 파이썬 웹 개발 책 72,75p 참고. 인덱스 부분에 갯수 보여주는것 -->
-                <td>{{loop.index0 + 2}} {{user.id}}</td>
+                <td>{{loop.index0 + 2}}, {{user.id}}</td>
                 <td>{{user.name}}</td>
                 <!-- | length 필터는 email에 갯수-->
                 <td>{{user.email | length}}, {{user.email}}</td> 
-                <td><button formaction="/users/read/{{user._id}}">read</button></td>
+                <td><button formaction="/users/read/{{user.id}}">read</button></td>
             </tr>
             {% endfor %}
         </tbody>

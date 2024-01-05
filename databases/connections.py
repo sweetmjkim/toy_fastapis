@@ -17,7 +17,7 @@
 
 from typing import Any, List, Optional
 
-from beanie import init_beanie, PydanticObjectId
+from beanie import init_beanie, PydanticObjectId        # PydanticObjectId는 beanie에 들어가있다.
 from models.users import User
 from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel
@@ -34,3 +34,27 @@ class Settings(BaseSettings):
         
     class Config:           # IP 주소를 암호화 하기위해 따로 관리한다. 파일명 : .env
         env_file = ".env"
+        
+class Database:
+    # model 즉 collection
+    def __init__(self, model) -> None:
+        self.model = model
+        pass
+    
+    # 전체 리스트
+    async def get_all(self) :
+        documents = await self.model.find_all().to_list()       # find({})
+        pass
+        return documents
+    
+    # 상세 보기
+    async def get(self, id: PydanticObjectId) -> Any:           # PydanticObjectId : 몽고디비는 ID가 절대값이기 변경하면 안되기에 특이하게 변형을 해준다.
+        doc = await self.model.get(id)      # find_one()        # doc값을 가지고 왔는데 있으면 받고, 만약에 아니라면 리턴한다.
+        if doc:
+            return doc
+        return False
+    
+    # 저장
+    async def save(self, document) -> None:
+        await document.create()
+        return None
